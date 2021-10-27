@@ -1,0 +1,13 @@
+config BR2_PACKAGE_SHARED_SECURE_PERIPHERALS
+	bool "shared-secure-peripherals"
+	depends on BR2_LINUX_KERNEL
+	depends on BR2_TARGET_OPTEE_OS
+	select BR2_PACKAGE_NORMAL_CONTROLLER
+	select BR2_PACKAGE_NORMAL_SSP_DRIVER
+	help
+	  Enables the use of shared secure peripherals in OP-TEE OS.
+
+	  https://github.com/Distrinet-TACOS/shared-secure-peripherals
+
+source "$BR2_EXTERNAL_SHARED_SECURE_PERIPHERALS_PATH/package/normal-controller/Config.in"
+source "$BR2_EXTERNAL_SHARED_SECURE_PERIPHERALS_PATH/package/normal-ssp-driver/Config.in"

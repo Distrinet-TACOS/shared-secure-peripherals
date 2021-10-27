@@ -1,0 +1,7 @@
+config BR2_PACKAGE_NORMAL_CONTROLLER
+	bool "normal-controller"
+	depends on BR2_PACKAGE_SHARED_SECURE_PERIPHERALS
+	help
+	  The normal world controller for shared secure peripherals.
+
+	  https://github.com/Distrinet-TACOS/shared-secure-peripherals
