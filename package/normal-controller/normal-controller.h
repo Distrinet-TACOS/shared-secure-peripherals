@@ -6,6 +6,6 @@
 #ifndef NORMAL_CONTROLLER
 #define NORMAL_CONTROLLER
 
-int nsp_register(uuid_t uuid, void (*notif_handler)(void));
+int norm_ssp_register(uuid_t uuid, void (*notif_handler)(void));
 
 #endif /* NORMAL_CONTROLLER */

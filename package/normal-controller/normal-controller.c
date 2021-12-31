@@ -1,18 +1,17 @@
+#include "normal-controller.h"
+
+#include <linux/cdev.h>
+#include <linux/errno.h>
+#include <linux/fs.h>
 #include <linux/init.h>
+#include <linux/interrupt.h>
+#include <linux/kfifo.h>
+#include <linux/list.h>
 #include <linux/module.h>
 #include <linux/printk.h>
-#include <linux/interrupt.h>
-#include <linux/version.h>
-#include <linux/errno.h>
-
 #include <linux/tee_drv.h>
 #include <linux/uuid.h>
-#include <linux/kfifo.h>
-#include <linux/fs.h>
-#include <linux/cdev.h>
-#include <linux/list.h>
-
-#include "normal-controller.h"
+#include <linux/version.h>
 #include <secure_controller_public.h>
 
 #define DRIVER_NAME "Normal controller"
@@ -175,18 +174,20 @@ static int register_notif_callback(void)
 
 static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
 {
-	if (ver->impl_id == TEE_IMPL_ID_OPTEE)
+	if (ver->impl_id == TEE_IMPL_ID_OPTEE) {
 		return 1;
-	else
+	} else {
 		return 0;
+	}
 }
 
 static int create_context(void)
 {
 	norm_cont.ctx =
 		tee_client_open_context(NULL, optee_ctx_match, NULL, NULL);
-	if (IS_ERR(norm_cont.ctx))
+	if (IS_ERR(norm_cont.ctx)) {
 		return -ENODEV;
+	}
 
 	return 0;
 }
@@ -200,9 +201,22 @@ static int destroy_context(void)
 
 static int __init controller_init(void)
 {
-	create_context();
-	open_session(DRIVER_NAME, &norm_cont.sess_id);
-	register_notif_callback();
+	int ret;
+
+	if ((ret = create_context()) < 0) {
+		pr_err("Could not create a context.\n");
+		return ret;
+	}
+
+	if ((ret = open_session(DRIVER_NAME, &norm_cont.sess_id)) < 0) {
+		pr_err("Could not open a session.\n");
+		return ret;
+	}
+
+	if ((ret = register_notif_callback())) {
+		pr_err("Could not register the callback.\n");
+		return ret;
+	}
 
 	return 0;
 }
@@ -224,7 +238,7 @@ MODULE_AUTHOR("Tom Van Eyck");
  *    API    *
  *************/
 
-int nsp_register(uuid_t uuid, void (*notif_handler)(void))
+int norm_ssp_register(uuid_t uuid, void (*notif_handler)(void))
 {
 	struct app *app;
 
@@ -242,4 +256,4 @@ int nsp_register(uuid_t uuid, void (*notif_handler)(void))
 
 	return 0;
 }
-EXPORT_SYMBOL(nsp_register);
+EXPORT_SYMBOL(norm_ssp_register);

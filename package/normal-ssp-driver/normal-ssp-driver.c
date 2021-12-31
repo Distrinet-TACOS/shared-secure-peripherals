@@ -5,7 +5,7 @@
 #include <linux/slab.h>
 #include <linux/tee_drv.h>
 
-#include "normal-controller.h"
+#include <normal-controller.h>
 #include <secure_ssp_driver_public.h>
 
 #define DRIVER_NAME "Normal world SSP driver"
@@ -297,11 +297,28 @@ static void destroy_context(void)
 
 static int __init mod_init(void)
 {
-	create_context();
-	open_session(DRIVER_NAME, &norm_driver.sess_id);
-	nsp_register(sec_ssp_uuid, notif_handler);
-	enable_interrupt(norm_driver.sess_id);
-	register_device();
+	int ret;
+
+	if ((ret = create_context()) < 0) {
+		pr_err("Could not create a context.\n");
+		return ret;
+	}
+	if ((ret = norm_ssp_register(sec_ssp_uuid, notif_handler)) < 0) {
+		pr_err("Could not register with the normal controller\n.");
+		return ret;
+	}
+	if ((ret = open_session(DRIVER_NAME, &norm_driver.sess_id)) < 0) {
+		pr_err("Could not open a session\n.");
+		return ret;
+	}
+	if ((ret = enable_interrupt(norm_driver.sess_id)) < 0) {
+		pr_err("Could not enable the interrupt\n.");
+		return ret;
+	}
+	if ((ret = register_device()) < 0) {
+		pr_err("Could not register the device\n.");
+		return ret;
+	}
 
 	return 0;
 }
