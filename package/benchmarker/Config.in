@@ -1,0 +1,7 @@
+config BR2_PACKAGE_BENCHMARKER
+	bool "benchmarker"
+	depends on BR2_PACKAGE_SHARED_SECURE_PERIPHERALS
+	help
+	  A simple benchmarker.
+
+	  https://github.com/Distrinet-TACOS/shared-secure-peripherals
