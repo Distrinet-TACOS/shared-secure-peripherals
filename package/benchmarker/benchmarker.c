@@ -223,6 +223,8 @@ static void bench_single_way(void)
 		pr_err("PRINT_MEM invoke error: %x.\n", inv_arg.ret);
 		return;
 	}
+
+	unregister_callback();
 }
 
 static void enable_counters(void *data)
@@ -388,10 +390,6 @@ static int __init controller_init(void)
 
 static void __exit controller_exit(void)
 {
-	if (kthread) {
-		kthread_stop(kthread);
-	}
-	unregister_callback();
 	close_session(bench.sess_id);
 	destroy_context();
 }
