@@ -35,15 +35,6 @@ static struct bench {
 	bool done;
 } bench = { .done = false };
 
-// static u32 stamp(void)
-// {
-// 	u32 ccounter;
-
-// 	asm volatile("mrc p15, 0, %0, c9, c13, 0" : "=r"(ccounter));
-
-// 	return ccounter;
-// }
-
 static void bench_rtt(void)
 {
 	int ret;
@@ -128,10 +119,7 @@ static void enable_counters(void *data);
 static int callback(void *s)
 {
 	stamp(stamps.end[stamps.counter]);
-	// stamps.end[stamps.counter] = ktime_get_ns();
 	stamps.middle[stamps.counter++] = *(u32 *)s;
-
-	// pr_info("cpu: %u\n", smp_processor_id());
 
 	if (stamps.counter >= MAX_STAMPS) {
 		bench.done = true;
@@ -165,20 +153,7 @@ static void bench_single_way(void)
 
 	stamps.counter = 0;
 
-	// ret = tee_client_invoke_func(bench.ctx, &inv_arg, params);
-	// if ((ret < 0) || (inv_arg.ret != 0)) {
-	// 	pr_err("SINGLE invoke error: %x.\n", inv_arg.ret);
-	// 	return;
-	// }
-	// return;
-
-	// pr_info("Start cpu: %u\n", smp_processor_id());
-
-	pr_info("Dit is een test!\n");
-	// enable_counters(NULL);
-
 	for (i = 0; i < MAX_STAMPS; i++) {
-		// stamps.start[i] = ktime_get_ns();
 		stamp(stamps.start[i]);
 		ret = tee_client_invoke_func(bench.ctx, &inv_arg, params);
 		if ((ret < 0) || (inv_arg.ret != 0)) {
@@ -279,23 +254,23 @@ static int benchmark(void *_)
 	pr_info("Start ticks : %u\n", start_ticks);
 	pr_info("End ticks   : %u\n", end_ticks);
 
-	// on_each_cpu(enable_counters, NULL, 1);
+	on_each_cpu(enable_counters, NULL, 1);
 
-	// pr_info("\n### RTT ###\n\n");
-	// bench_rtt();
+	pr_info("\n### RTT ###\n\n");
+	bench_rtt();
 
-	// if (kthread_should_stop()) {
-	// 	return -1;
-	// }
+	if (kthread_should_stop()) {
+		return -1;
+	}
 
-	// on_each_cpu(enable_counters, NULL, 1);
+	on_each_cpu(enable_counters, NULL, 1);
 
-	// pr_info("\n\n### RTT_MEM ###\n\n");
-	// bench_rtt_mem();
+	pr_info("\n\n### RTT_MEM ###\n\n");
+	bench_rtt_mem();
 
-	// if (kthread_should_stop()) {
-	// 	return -1;
-	// }
+	if (kthread_should_stop()) {
+		return -1;
+	}
 
 	on_each_cpu(enable_counters, NULL, 1);
 
