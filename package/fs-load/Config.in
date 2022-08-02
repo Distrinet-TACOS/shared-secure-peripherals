@@ -1,0 +1,12 @@
+config BR2_PACKAGE_FS_LOAD
+	bool "fs-load"
+	help
+	  TEE Supplicant plugin to load files from the REE file system.
+
+	  UUId: b9b4b4c7-983f-497a-9fdc-f5df864f29c4
+
+		#define TA_UUID
+        	{ 0xb9b4b4c7, 0x983f, 0x497a, \
+                { 0x9f, 0xdc, 0xf5, 0xdf, 0x86, 0x4f, 0x29, 0xc4} }
+
+	  https://github.com/Distrinet-TACOS/shared-secure-peripherals
