@@ -12,3 +12,5 @@ config BR2_PACKAGE_SHARED_SECURE_PERIPHERALS
 source "$BR2_EXTERNAL_SHARED_SECURE_PERIPHERALS_PATH/package/normal-controller/Config.in"
 source "$BR2_EXTERNAL_SHARED_SECURE_PERIPHERALS_PATH/package/normal-ssp-driver/Config.in"
 source "$BR2_EXTERNAL_SHARED_SECURE_PERIPHERALS_PATH/package/benchmarker/Config.in"
+source "$BR2_EXTERNAL_SHARED_SECURE_PERIPHERALS_PATH/package/linux-watchdog/Config.in"
+source "$BR2_EXTERNAL_SHARED_SECURE_PERIPHERALS_PATH/package/fs-load/Config.in"
