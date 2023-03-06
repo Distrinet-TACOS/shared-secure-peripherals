@@ -78,6 +78,16 @@ static TEEC_Result load_kernel_image(void *buffer, size_t buf_size,
 	}
 
 	IMSG("Successfully read buffer");
+	IMSG("%x", ((uint8_t *)buffer)[0]);
+	IMSG("%x", ((uint8_t *)buffer)[1]);
+	IMSG("%x", ((uint8_t *)buffer)[2]);
+	IMSG("%x", ((uint8_t *)buffer)[3]);
+	IMSG("%x", ((uint8_t *)buffer)[4]);
+	IMSG("%x", ((uint8_t *)buffer)[5]);
+	IMSG("%x", ((uint8_t *)buffer)[6]);
+	IMSG("%x", ((uint8_t *)buffer)[7]);
+	IMSG("%x", ((uint8_t *)buffer)[8]);
+	IMSG("%x", ((uint8_t *)buffer)[9]);
 
 	*ta_size = s;
 	fclose(file);
