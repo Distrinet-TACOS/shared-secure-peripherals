@@ -60,7 +60,7 @@ static int notify_apps(uuid_t *uuids, unsigned int count)
 	return 0;
 }
 
-static int notification_handler(void)
+static int notification_handler(void *_)
 {
 	int ret = 0;
 	struct tee_ioctl_invoke_arg inv_arg;
